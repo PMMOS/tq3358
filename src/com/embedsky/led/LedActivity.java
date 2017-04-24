@@ -3,6 +3,8 @@ package com.embedsky.led;
 import com.embedsky.httpUtils.httpUtils;
 import com.embedsky.httpUtils.lockStruct;
 
+import com.embedsky.adc.Adc;
+
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -12,6 +14,7 @@ import org.json.JSONException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -29,7 +32,7 @@ public class LedActivity extends Activity {
 	/** Called when the activity is first created. */
 
 	//加载libled.so库，必须放在最前面
-	/*static {
+	static {
 		System.loadLibrary("led");
 	}
 
@@ -40,7 +43,7 @@ public class LedActivity extends Activity {
 	//点亮led
 	public static native boolean ledSetOn(int number);
 	//灭掉led
-	public static native boolean ledSetOff(int number);*/
+	public static native boolean ledSetOff(int number);
 	
 	//private String url="http://120.76.219.196:85/trucklogs/add_log";
 	private String url="http://192.168.10.87:8080/MyWeb/MyServlet";
@@ -86,6 +89,11 @@ public class LedActivity extends Activity {
 		MyClickListener myClickListern = new MyClickListener();
 		
 		ReGetuiApplication.ReActivity = this;
+		
+		Intent intent = new Intent(this, Adc.class);
+		intent.setClass(this, Adc.class);
+		startActivity(intent);
+		
 
 		// LED1-LED8选中/取消事件
 		for (int i = 0; i < 2; i++) {
@@ -108,19 +116,22 @@ public class LedActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				//if(ledClose()){
-					finish();
+					//finish();
 				//}
+				
+				tLogView.append(Adc.adcReadValue()+"/n");
 				
 			}
 		});
 
 		// lock初始化
-		/*if (!ledInit()) {
+		if (!ledInit()) {
 			new AlertDialog.Builder(this).setTitle("init lock fail").show();
 			//lock初始化失败，则使控件不可点击
 			for (int i = 0; i < 2; i++)
 				cb[i].setEnabled(false);
-		}*/
+		}
+		
 		
 		cnt = 0;
 		
