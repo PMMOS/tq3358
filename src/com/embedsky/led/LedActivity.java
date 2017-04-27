@@ -29,7 +29,7 @@ public class LedActivity extends Activity {
 	/** Called when the activity is first created. */
 
 	//加载libled.so库，必须放在最前面
-	/*static {
+	static {
 		System.loadLibrary("led");
 	}
 
@@ -40,11 +40,13 @@ public class LedActivity extends Activity {
 	//点亮led
 	public static native boolean ledSetOn(int number);
 	//灭掉led
-	public static native boolean ledSetOff(int number);*/
+	public static native boolean ledSetOff(int number);
 	
-	//private String url="http://120.76.219.196:85/trucklogs/add_log";
-	private String url="http://192.168.10.87:8080/MyWeb/MyServlet";
+	private String url="http://120.76.219.196:85/trucklogs/add_log";
+	//private String url="http://192.168.10.87:8080/MyWeb/MyServlet";
+	private String getuiurl = "http://120.76.219.196:85/getui/post";
 	private static HashMap<String, String> params = new HashMap<String, String>();
+	private static HashMap<String, String> cidparams = new HashMap<String, String>();
 	private static lockStruct[] lockstruct = new lockStruct[5];
 	private static String[] lockstatustemp = new String[5];
 	private static boolean flag;
@@ -107,28 +109,47 @@ public class LedActivity extends Activity {
 		btnQuit.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//if(ledClose()){
+				if(ledClose()){
 					finish();
-				//}
+				}
 				
 			}
 		});
 
 		// lock初始化
-		/*if (!ledInit()) {
+		if (!ledInit()) {
 			new AlertDialog.Builder(this).setTitle("init lock fail").show();
 			//lock初始化失败，则使控件不可点击
 			for (int i = 0; i < 2; i++)
 				cb[i].setEnabled(false);
-		}*/
+		}
 		
 		cnt = 0;
 		
 		PushManager.getInstance().initialize(this.getApplicationContext(),GetuiPushService.class);
 		PushManager.getInstance().registerPushIntentService(this.getApplicationContext(),ReIntentService.class);
-		//String cid = PushManager.getInstance().getClientid(this.getApplicationContext());
+		String cid = PushManager.getInstance().getClientid(this.getApplicationContext());
 		//tLogView.append(cid);
-		
+		if(cid != null){
+			cidparams.put("truck_sid", "2");
+			cidparams.put("cid", cid);
+			
+			httpUtils.doPostAsyn(getuiurl, cidparams, new httpUtils.HttpCallBackListener() {
+	            @Override
+	            public void onFinish(String result) {
+	                Message message = new Message();
+	                message.obj=result;
+	                handler.sendMessage(message);
+	          
+	            }
+
+	            @Override
+	            public void onError(Exception e) {
+	            }
+
+	        });
+		}
+				
 		timer.schedule(task, 5000, 5000); // 5s后执行task,经过5s再次执行
 	}
 	

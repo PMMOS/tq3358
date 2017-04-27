@@ -54,16 +54,16 @@ public class ReGetuiApplication extends Application {
     				  				      		
 	        		if(operate.equals("0")){
 	        			//temp = true;
-	        			//temp = LedActivity.ledSetOn(1);
+	        			temp = LedActivity.ledSetOn(1);
 	        		}else if(operate.equals("1")){
 	        			//temp = true;
-	        			//temp = LedActivity.ledSetOff(1);
+	        			temp = LedActivity.ledSetOff(1);
 	        		}else if(operate.equals("2")){
 	        			//temp = true;
-	        			//temp = LedActivity.ledSetOn(2);
+	        			temp = LedActivity.ledSetOn(2);
 	        		}else if(operate.equals("3")){
 	        			//temp = true;
-	        			//temp = LedActivity.ledSetOff(2);
+	        			temp = LedActivity.ledSetOff(2);
 	        		}	        		
     	        		  				
     			} catch (JSONException e) {
