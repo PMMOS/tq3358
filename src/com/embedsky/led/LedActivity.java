@@ -165,7 +165,7 @@ public class LedActivity extends Activity {
 				flag = false;
 			}
 			if(flag){
-				params.put("truck_sid", "1");
+				params.put("truck_sid", "2");
 				JSONObject lock_val = new JSONObject();
 				for(int i=0; i<5; i++){
 					try {
